@@ -1,0 +1,23 @@
+{
+  "name": "milk-calc",
+  "version": "1.0.0",
+  "private": true,
+  "description": "ミルクけいさん - 粉ミルクの量・お湯・さまし湯を計算",
+  "scripts": {
+    "serve": "npx --yes serve www -l 5173",
+    "setup": "npx cap add ios && npx cap add android && npm run assets",
+    "assets": "npx @capacitor/assets generate --iconBackgroundColor '#fff1e4' --splashBackgroundColor '#fff6ee'",
+    "sync": "npx cap sync",
+    "ios": "npx cap sync ios && npx cap open ios",
+    "android": "npx cap sync android && npx cap open android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^7.0.0",
+    "@capacitor/core": "^7.0.0",
+    "@capacitor/ios": "^7.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "^3.0.5",
+    "@capacitor/cli": "^7.0.0"
+  }
+}

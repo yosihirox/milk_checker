@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>ミルクけいさん</title>
+  <meta name="description" content="作りたいミルクの量を入れるだけで、お湯・さまし湯・粉ミルクの量とスプーンの杯数がわかります。">
+  <meta name="theme-color" content="#fff6ee">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ミルクけいさん">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="icons/icon-192.png">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="top">
+      <svg class="logo" viewBox="0 0 64 64" aria-hidden="true">
+        <rect x="24" y="4" width="16" height="8" rx="4" fill="#f4a6a6"/>
+        <rect x="20" y="11" width="24" height="7" rx="2" fill="#f7c59f"/>
+        <rect x="16" y="17" width="32" height="42" rx="10" fill="#fff" stroke="#e8b48a" stroke-width="3"/>
+        <rect x="19" y="34" width="26" height="22" rx="7" fill="#fff1d6"/>
+      </svg>
+      <h1>ミルクけいさん</h1>
+      <button class="icon-btn" id="openSettings" aria-label="設定">
+        <svg viewBox="0 0 24 24" width="24" height="24"><path fill="currentColor" d="M12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Zm7.43-2.53c.04-.32.07-.64.07-.97s-.03-.66-.07-1l2.11-1.63a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a7.3 7.3 0 0 0-1.69-.98l-.38-2.65A.49.49 0 0 0 14 2h-4a.49.49 0 0 0-.49.42l-.38 2.65c-.61.25-1.17.59-1.69.98l-2.49-1a.5.5 0 0 0-.61.22l-2 3.46a.49.49 0 0 0 .12.64L4.57 11c-.04.34-.07.67-.07 1s.03.65.07.97l-2.11 1.66a.49.49 0 0 0-.12.64l2 3.46c.12.22.39.3.61.22l2.49-1.01c.52.4 1.08.73 1.69.98l.38 2.65c.03.24.24.42.49.42h4c.25 0 .46-.18.49-.42l.38-2.65c.61-.25 1.17-.58 1.69-.98l2.49 1.01c.22.08.49 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.11-1.66Z"/></svg>
+      </button>
+    </header>
+
+    <main class="layout">
+      <!-- 入力 -->
+      <section class="card input-card" aria-label="作りたいミルクの量">
+        <p class="label">つくりたいミルクの量</p>
+        <div class="amount-row">
+          <button class="step" data-step="-10" aria-label="10ml減らす">−</button>
+          <label class="amount">
+            <input id="total" type="number" inputmode="numeric" min="10" max="400" step="10" value="120" aria-label="ミルクの総量 (ml)">
+            <span class="unit">ml</span>
+          </label>
+          <button class="step" data-step="10" aria-label="10ml増やす">＋</button>
+        </div>
+        <input id="slider" type="range" min="10" max="300" step="10" value="120" aria-label="ミルクの総量スライダー">
+        <div class="chips" id="chips"></div>
+      </section>
+
+      <!-- 哺乳瓶イラスト -->
+      <section class="card bottle-card" aria-label="哺乳瓶のイメージ">
+        <svg id="bottle" viewBox="0 0 220 360" role="img" aria-label="哺乳瓶のイラスト"></svg>
+        <div class="legend">
+          <span><i class="sw hot"></i>お湯</span>
+          <span><i class="sw cool"></i>さまし湯</span>
+        </div>
+      </section>
+
+      <!-- お湯 -->
+      <section class="card result hot-card">
+        <div class="illus">
+          <svg viewBox="0 0 120 110" aria-hidden="true">
+            <path class="steam s1" d="M48 26c-6-8 6-12 0-20" />
+            <path class="steam s2" d="M62 26c-6-8 6-12 0-20" />
+            <path class="steam s3" d="M76 26c-6-8 6-12 0-20" />
+            <path d="M88 52 l24 -14 q6 -2 4 4 l-18 22z" fill="#ffb385"/>
+            <ellipse cx="62" cy="36" rx="18" ry="5" fill="#ff9e6d"/>
+            <rect x="56" y="28" width="12" height="7" rx="3" fill="#e87d4c"/>
+            <path d="M28 46 q34 -16 68 0 l6 46 q-40 14 -80 0z" fill="#ffc4a0"/>
+            <path d="M30 60 q32 8 64 0" stroke="#fff" stroke-width="3" fill="none" opacity=".6"/>
+            <path d="M20 54 q-12 14 4 28" stroke="#ff9e6d" stroke-width="6" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <p class="r-title">① お湯 <small>（70℃以上・全体の⅔）</small></p>
+          <p class="r-value"><span id="hot">80</span><span class="u">ml</span></p>
+          <p class="r-note">目盛り <b id="hotLine">80</b>ml まで注いで、よく溶かす</p>
+        </div>
+      </section>
+
+      <!-- さまし湯 -->
+      <section class="card result cool-card">
+        <div class="illus">
+          <svg viewBox="0 0 120 110" aria-hidden="true">
+            <path d="M32 18 h56 l-8 82 q-20 6 -40 0z" fill="#e6f3ff" stroke="#8cc4f0" stroke-width="3"/>
+            <path d="M37 50 h46 l-5 48 q-18 5 -36 0z" fill="#9fd3ff"/>
+            <rect x="46" y="56" width="12" height="12" rx="3" fill="#fff" opacity=".8" transform="rotate(-12 52 62)"/>
+            <rect x="62" y="70" width="11" height="11" rx="3" fill="#fff" opacity=".8" transform="rotate(14 67 75)"/>
+            <circle cx="58" cy="86" r="2.5" fill="#fff" opacity=".9"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <p class="r-title">② さまし湯 <small>（湯冷まし・全体の⅓）</small></p>
+          <p class="r-value"><span id="cool">40</span><span class="u">ml</span></p>
+          <p class="r-note">目盛り <b id="coolLine">120</b>ml まで足す</p>
+        </div>
+      </section>
+
+      <!-- 粉ミルク -->
+      <section class="card result powder-card">
+        <div class="powder-head">
+          <div class="illus">
+            <svg viewBox="0 0 120 110" aria-hidden="true">
+              <rect x="26" y="20" width="68" height="16" rx="5" fill="#f4a6a6"/>
+              <rect x="22" y="32" width="76" height="70" rx="12" fill="#fff" stroke="#f4a6a6" stroke-width="3"/>
+              <circle cx="60" cy="66" r="18" fill="#ffe7e7"/>
+              <path d="M51 68 q9 9 18 0" stroke="#e57f7f" stroke-width="3" fill="none" stroke-linecap="round"/>
+              <circle cx="53" cy="61" r="2.4" fill="#e57f7f"/><circle cx="67" cy="61" r="2.4" fill="#e57f7f"/>
+            </svg>
+          </div>
+          <div class="txt">
+            <p class="r-title">③ 粉ミルク</p>
+            <p class="r-value"><span id="powder">16.2</span><span class="u">g</span></p>
+            <p class="r-note"><span id="powderBasis">100mlあたり 13.5g</span></p>
+          </div>
+        </div>
+        <p class="scoop-title">スプーンの杯数（すりきり）</p>
+        <div class="scoops" id="scoops"></div>
+        <p class="scoop-total" id="scoopTotal"></p>
+      </section>
+
+      <!-- 手順 -->
+      <section class="card steps-card">
+        <p class="label">つくりかた</p>
+        <ol class="steps">
+          <li><span class="n">1</span><span>哺乳瓶に粉ミルクを入れる</span></li>
+          <li><span class="n">2</span><span>70℃以上のお湯を <b class="js-hot">80</b>ml 注ぎ、やさしく振って溶かす</span></li>
+          <li><span class="n">3</span><span>さまし湯を <b class="js-cool">40</b>ml 足して <b class="js-total">120</b>ml にする</span></li>
+          <li><span class="n">4</span><span>腕の内側に垂らして人肌（約40℃）か確かめる</span></li>
+        </ol>
+        <p class="fine">※ 粉ミルクの量は製品ごとに違います。必ずお使いの缶の表示を確認し、⚙設定で合わせてください。</p>
+      </section>
+    </main>
+  </div>
+
+  <!-- 設定 -->
+  <dialog id="settings">
+    <form method="dialog" class="settings-form">
+      <h2>設定</h2>
+      <label class="field">
+        <span>粉ミルクの量（できあがり100mlあたり）</span>
+        <span class="field-input"><input id="g100" type="number" step="0.1" min="1" max="40" inputmode="decimal"> g</span>
+      </label>
+      <p class="fine">缶に「20mlにつき 2.7g」などと書かれていれば、5倍した値（13.5g）を入れてください。スプーン1杯の重さもこの値から計算します。</p>
+      <fieldset class="field">
+        <legend>使うスプーン</legend>
+        <label class="check"><input type="checkbox" id="use100" checked> 100ml用</label>
+        <label class="check"><input type="checkbox" id="use50" checked> 50ml用</label>
+        <label class="check"><input type="checkbox" id="use20" checked> 20ml用</label>
+      </fieldset>
+      <div class="actions">
+        <button value="close" class="primary">とじる</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

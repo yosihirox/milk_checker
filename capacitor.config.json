@@ -1,0 +1,8 @@
+{
+  "appId": "com.example.milkcalc",
+  "appName": "ミルクけいさん",
+  "webDir": "www",
+  "backgroundColor": "#fff6ee",
+  "ios": { "contentInset": "never" },
+  "android": { "backgroundColor": "#fff6ee" }
+}
