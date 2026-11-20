@@ -19,7 +19,7 @@ GitHub リポジトリ：https://github.com/yosihirox/milk_checker （このフ�
 
 | 項目 | 状態 |
 |---|---|
-| Web/PWA 版 | 完成。ブラウザでスマホ幅・PC幅とも表示と計算を確認済み |
+| Web/PWA 版 | 完成・**公開中**：https://yosihirox.github.io/milk_checker/ （GitHub Pages。表示・計算・Service Worker の動作を確認済み） |
 | iOS / Android プロジェクト | **未生成**（この Mac に Node.js が入っていないため） |
 | GitHub | milk_checker の main に push 済み（コミット作者は `yosihirox` / `yosihirox@users.noreply.github.com`） |
 | ストア申請 | 未着手（Apple Developer Program / Google Play Console の登録が必要） |
@@ -45,10 +45,9 @@ README.md               公開・ストア申請の手順
 
 ## 4. 次にやること
 
-1. **Web 公開**：GitHub Pages などで `www/` を公開すれば、Web 版と PWA 版がすぐ使える。
-2. **Node.js を入れる** → `npm install` → `npm run setup`（iOS/Android の追加とアイコン生成）。
-3. `capacitor.config.json` の `appId` を自分のもの（例：`jp.yosihirox.milkcalc`）に変更。
-4. `npm run ios` で Xcode、`npm run android` で Android Studio を開いて署名し、ストアに提出する。
+1. **Node.js を入れる** → `npm install` → `npm run setup`（iOS/Android の追加とアイコン生成）。
+2. `capacitor.config.json` の `appId` を自分のもの（例：`jp.yosihirox.milkcalc`）に変更。
+3. `npm run ios` で Xcode、`npm run android` で Android Studio を開いて署名し、ストアに提出する。
 
 ## 5. 仕様と決めたこと
 
@@ -77,3 +76,15 @@ python3 -m http.server 5173 -d www
 ```
 
 ブラウザで http://localhost:5173 を開く。
+
+## 8. Web 版の更新方法（GitHub Pages）
+
+- 公開元は **`gh-pages` ブランチのルート**（Settings → Pages → Deploy from a branch）。中身は `www/` だけ。
+- `www/` を直したら、main にコミットしてから次を実行する：
+  ```bash
+  git push
+  git subtree push --prefix www origin gh-pages
+  ```
+  1〜2分で反映される。
+- 画面が古いままのときは、`www/sw.js` の `CACHE` の名前（`milk-calc-v1`）を `v2` などに上げると、利用者の端末のキャッシュも入れ替わる。
+- push で自動公開する GitHub Actions（`.github/workflows/pages.yml`）も作ったが、**未コミット**。この Mac の GitHub ログインに `workflow` 権限がなく、push できなかったため。使う場合は、権限を付けて push するか、GitHub の画面からファイルを追加し、Pages の Source を「GitHub Actions」に変える。
